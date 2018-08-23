@@ -8,10 +8,33 @@ from math import sin
 
 
 class Generator(object):
-    def __init__(self, display):
+    def __init__(self, display=None):
         self.display = display
 
         self.seed = 101010101
+
+        self.x_mod = 50
+        self.y_mod = 50
+
+    def pivotal_oscillator(self, x, y):
+        oscillator = abs(
+            100 * sin((x % self.x_mod) + (y % self.y_mod)) / (
+                (x % self.x_mod) + (y % self.y_mod) if not (x % self.x_mod) + (y % self.y_mod) == 0 else 44)
+        )
+
+        return oscillator
+
+    def pivotal_state(self, x, y):
+        oscillator = self.pivotal_oscillator(x, y)
+
+        if oscillator < 1:
+            return 0
+        elif oscillator < 5:
+            return 1
+        elif oscillator < 10:
+            return 2
+        else:
+            return 3
 
     def get_state(self, x, y):
         # Every section_l blocks there will be a block chosen by a certain number in the seed fed into a formula
@@ -20,18 +43,7 @@ class Generator(object):
         if not x % section_l and not y % section_l:  # is pivotal block
             # Will use oscillating function with weights determined by the seed to chose pivotal blocks
 
-            oscillator = 100 * sin((x % 100) + (y % 100)) / ((x % 100) + (y % 100) if not (x % 1) + (y % 100) == 0 else 44)
-
-            oscillator = abs(oscillator)
-
-            if oscillator < 1:
-                state = 0
-            elif oscillator < 5:
-                state = 1
-            elif oscillator < 10:
-                state = 2
-            else:
-                state = 3
+            state = self.pivotal_state(x, y)
 
         else:
             if (x + y) % 2:  # is odd block
