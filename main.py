@@ -5,9 +5,12 @@ import pygame
 
 from vars_constant import screen_width, screen_height, fps
 
+import map
+
 import control_keyboard
 
 from file_io import read_startup_file
+
 
 
 def main():
@@ -21,10 +24,16 @@ def main():
 
     clock = pygame.time.Clock()
 
+    simulation_map = map.Map(display)
+
     keyboard = control_keyboard.Keyboard(startup_dict['Keyboard Control Slot'])
 
     while True:
         keyboard.update()
+
+        display.fill((255, 255, 255))
+
+        simulation_map.render()
 
         pygame.display.flip()
 
