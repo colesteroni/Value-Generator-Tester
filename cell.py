@@ -8,13 +8,13 @@ import vars_global
 
 
 class Cell(object):
-    def __init__(self, display, x, y):
+    def __init__(self, display, state, x, y):
         self.display = display
 
         self.x = x
         self.y = y
 
-        self.state = 0
+        self.state = state
 
         self.size = 50
 
@@ -23,8 +23,6 @@ class Cell(object):
         self.rect = self.surface.get_rect(center=(self.x * self.size + int(self.size / 2), self.y * self.size + int(self.size / 2)))
 
     def update(self):
-        self.state = (4, 6)[(self.x + self.y) % 2]
-
         self.surface.fill(state_dict[self.state])
 
         self.rect = self.surface.get_rect(
