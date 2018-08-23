@@ -8,7 +8,7 @@ import vars_global
 from file_io import read_control_dictionary, write_control_dictionary
 
 
-class Keyboard(object):
+class Controller(object):
     def __init__(self, slot):
         self.slot = slot
 

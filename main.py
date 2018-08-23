@@ -7,7 +7,7 @@ from vars_constant import screen_width, screen_height, fps
 
 import map
 
-import control_keyboard
+import controller
 
 from file_io import read_startup_file
 
@@ -26,10 +26,10 @@ def main():
 
     simulation_map = map.Map(display)
 
-    keyboard = control_keyboard.Keyboard(startup_dict['Keyboard Control Slot'])
+    controls = controller.Controller(startup_dict['Control Slot'])
 
     while True:
-        keyboard.update()
+        controls.update()
 
         display.fill((255, 255, 255))
 
