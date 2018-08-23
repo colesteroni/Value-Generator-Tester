@@ -4,7 +4,7 @@ import pickle
 
 
 def read_startup_file():
-    with open('startup.dat', 'rb') as f:
+    with open('data/startup.dat', 'rb') as f:
         startup_dict = pickle.load(f)
 
         return startup_dict
