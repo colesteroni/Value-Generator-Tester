@@ -20,14 +20,16 @@ class Cell(object):
 
         self.surface = pygame.Surface((self.size, self.size))
 
-        self.rect = self.surface.get_rect(center=(self.x * self.size + int(self.size / 2), self.y * self.size + int(self.size / 2)))
+        self.rect = self.surface.get_rect(
+            center=(self.x * self.size + int(self.size / 2), self.y * self.size + int(self.size / 2))
+        )
 
     def update(self):
         self.surface.fill(state_dict[self.state])
 
         self.rect = self.surface.get_rect(
             center=(
-                vars_global.spectator_x - (self.x * self.size) + int(self.size / 2),
+                -1 * vars_global.spectator_x + (self.x * self.size) + int(self.size / 2),
                 vars_global.spectator_y - (self.y * self.size) + int(self.size / 2)
             )
         )

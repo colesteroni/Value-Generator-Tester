@@ -18,7 +18,7 @@ class Map(object):
 
     def update(self):
         self.cell_list = self.generator.generate(
-            (int(vars_global.spectator_x / 50) - 13, int(vars_global.spectator_x / 50) + 2),
+            (int(vars_global.spectator_x / 50) - 1, int(vars_global.spectator_x / 50) + 14),
             (int(vars_global.spectator_y / 50) - 10, int(vars_global.spectator_y / 50) + 2)
         )
 
