@@ -3,14 +3,13 @@
 
 import pygame
 
-from vars_constant import screen_width, screen_height, fps
+from vars_constant import screen_width, screen_height, bg, fps
 
-import map
+from map import Map
 
-import controller
+from controller import Controller
 
 from file_io import read_startup_file
-
 
 
 def main():
@@ -24,14 +23,15 @@ def main():
 
     clock = pygame.time.Clock()
 
-    simulation_map = map.Map(display)
+    simulation_map = Map(display)
 
-    controls = controller.Controller(startup_dict['Control Slot'])
+    controls = Controller(startup_dict['Control Slot'])
 
     while True:
         controls.update()
+        simulation_map.update()
 
-        display.fill((255, 255, 255))
+        display.fill(bg)
 
         simulation_map.render()
 

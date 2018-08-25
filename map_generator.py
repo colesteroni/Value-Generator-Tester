@@ -28,8 +28,8 @@ class Generator(object):
         self.y_mod = int("0x" + self.seed[0:2], 0)
 
     def pivotal_oscillator(self, x, y):
-        ''' TODO - Better oscillating function or different block selection because rare blocks get clustered around \
-                the top left edge of each section (unless that is the goal?) - One that hits higher values for longer'''
+        # TODO - Better oscillating function or different block selection because rare blocks get clustered around
+        #       the top left edge of each section (unless that is the goal?) - One that hits higher values for longer
         # TODO - Test and see empirically how well mixed the pivotal blocks are!
 
         oscillator = abs(

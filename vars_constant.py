@@ -2,9 +2,10 @@
 
 from colors import *
 
-
 screen_height = 480
 screen_width = 640
+
+bg = white
 
 # TODO - Dynamic fps
 fps = 60

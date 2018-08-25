@@ -22,9 +22,10 @@ class Map(object):
             (int(vars_global.spectator_y / 50) - 10, int(vars_global.spectator_y / 50) + 2)
         )
 
-    def render(self):
-        self.update()
+    def render(self, cell_list=None):
+        # TODO - Make more efficient than copying whole list of objects
+        cell_list = cell_list if cell_list else self.cell_list
 
-        for column in self.cell_list:
+        for column in cell_list:
             for row in column:
                 row.render()
