@@ -8,24 +8,37 @@ from math import sin
 
 
 class Generator(object):
-    def __init__(self, display=None, seed="3434"):
+    def __init__(self, display=None, seed="3232"):
         self.display = display
 
-        # TODO - make each key apply the value at the index to the variable that is the value
+        self.x_mod = 0
+        self.y_mod = 0
+
+        def set_by_dict(key, digit, value):
+            value = int("0x" + value, 0) * (1 if digit == 1 else ((digit - 1) * 16))
+
+            if key == 'x_mod':
+                self.x_mod += value
+            elif key == 'y_mod':
+                self.y_mod += value
+
         seed_dict = {
-            0: 'y_mod', 1: 'y_mod', 2: 'x_mod', 3: 'x_mod'
+            0: (lambda value: set_by_dict('y_mod', 1, value)),
+            1: (lambda value: set_by_dict('y_mod', 2, value)),
+            2: (lambda value: set_by_dict('x_mod', 1, value)),
+            3: (lambda value: set_by_dict('x_mod', 2, value))
         }
 
-        # See if seed valid, if not append to it
         if len(seed) < len(seed_dict):
             # TODO - Randomly generate hex numbers for each but make sure are safe
             seed += 'A'
 
         self.seed = seed[::-1].upper()
 
-        # TODO - better system of converting hex string to int!ww
-        self.x_mod = int("0x" + self.seed[2:4], 0)
-        self.y_mod = int("0x" + self.seed[0:2], 0)
+        for digit in range(0, len(self.seed)):
+            seed_dict[digit](self.seed[digit])
+
+        print("x_mod: {}, y_mod: {}".format(self.x_mod, self.y_mod))
 
     def pivotal_oscillator(self, x, y):
         # TODO - Better oscillating function or different block selection because rare blocks get clustered around
