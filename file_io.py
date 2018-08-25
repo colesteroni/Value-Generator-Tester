@@ -11,12 +11,12 @@ def read_startup_file():
 
 
 def read_control_dictionary(slot):
-    with open('data/controllers/{}.dat'.format(slot), 'rb') as f_control_dictionary:
+    with open('data/controller_schemes/{}.dat'.format(slot), 'rb') as f_control_dictionary:
         control_dictionary = pickle.load(f_control_dictionary)
 
         return control_dictionary
 
 
 def write_control_dictionary(slot, control_dictionary):
-    with open('data/controllers/{}.dat'.format(slot), 'wb') as f_control_dictionary:
+    with open('data/controller_schemes/{}.dat'.format(slot), 'wb') as f_control_dictionary:
         pickle.dump(control_dictionary, f_control_dictionary)

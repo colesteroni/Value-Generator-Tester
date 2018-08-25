@@ -8,15 +8,30 @@ from math import sin
 
 
 class Generator(object):
-    def __init__(self, display=None):
+    def __init__(self, display=None, seed="3434"):
         self.display = display
 
-        self.seed = 101010101
+        # TODO - make each key apply the value at the index to the variable that is the value
+        seed_dict = {
+            0: 'y_mod', 1: 'y_mod', 2: 'x_mod', 3: 'x_mod'
+        }
 
-        self.x_mod = 50
-        self.y_mod = 50
+        # See if seed valid, if not append to it
+        if len(seed) < len(seed_dict):
+            # TODO - Randomly generate hex numbers for each but make sure are safe
+            seed += 'A'
+
+        self.seed = seed[::-1].upper()
+
+        # TODO - better system of converting hex string to int!ww
+        self.x_mod = int("0x" + self.seed[2:4], 0)
+        self.y_mod = int("0x" + self.seed[0:2], 0)
 
     def pivotal_oscillator(self, x, y):
+        ''' TODO - Better oscillating function or different block selection because rare blocks get clustered around \
+                the top left edge of each section (unless that is the goal?) - One that hits higher values for longer'''
+        # TODO - Test and see empirically how well mixed the pivotal blocks are!
+
         oscillator = abs(
             100 * sin((x % self.x_mod) + (y % self.y_mod)) / (
                 (x % self.x_mod) + (y % self.y_mod) if not (x % self.x_mod) + (y % self.y_mod) == 0 else 44)
@@ -27,11 +42,11 @@ class Generator(object):
     def pivotal_state(self, x, y):
         oscillator = self.pivotal_oscillator(x, y)
 
-        if oscillator < 1:
+        if oscillator < .8:
             return 0
-        elif oscillator < 5:
+        elif oscillator < 2.8:
             return 1
-        elif oscillator < 10:
+        elif oscillator < 5:
             return 2
         else:
             return 3

@@ -6,10 +6,10 @@ import vars_global
 
 
 class Map(object):
-    def __init__(self, display):
+    def __init__(self, display, generator=None):
         self.display = display
 
-        self.generator = map_generator.Generator(self.display)
+        self.generator = generator if generator else map_generator.Generator(self.display)
 
         self.cell_list = self.generator.generate(
             (vars_global.spectator_x - 10, vars_global.spectator_x + 10),
