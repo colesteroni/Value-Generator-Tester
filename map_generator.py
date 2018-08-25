@@ -5,6 +5,7 @@ from cell import Cell
 from vars_constant import section_l
 
 from math import sin
+import random
 
 
 class Generator(object):
@@ -15,11 +16,12 @@ class Generator(object):
         self.y_mod = 0
 
         def set_by_dict(key, digit, value):
-            value = int("0x" + value, 0) * (1 if digit == 1 else ((digit - 1) * 16))
+            if type(value) is not int:
+                value = int("0x" + value, 0) * (1 if digit == 1 else ((digit - 1) * 16))
 
-            if key == 'x_mod':
+            if key is 'x_mod':
                 self.x_mod += value
-            elif key == 'y_mod':
+            elif key is 'y_mod':
                 self.y_mod += value
 
         seed_dict = {
@@ -29,21 +31,24 @@ class Generator(object):
             3: (lambda value: set_by_dict('x_mod', 2, value))
         }
 
-        if len(seed) < len(seed_dict):
-            # TODO - Randomly generate hex numbers for each but make sure are safe
-            seed += 'A'
-
         self.seed = seed[::-1].upper()
 
-        for digit in range(0, len(self.seed)):
-            seed_dict[digit](self.seed[digit])
+        for n in range(0, len(self.seed)):
+            seed_dict[n](self.seed[n])
 
-        print("x_mod: {}, y_mod: {}".format(self.x_mod, self.y_mod))
+        # If string not quite long enough
+        if len(seed) < len(seed_dict):
+            for i in range(len(seed_dict) - len(seed), len(seed_dict)):
+                seed_dict[n](random.randint(0, 15))
+
+        # Ensure variable hard requirements met
+        if self.x_mod < 40: self.x_mod = 40
+
+        if self.y_mod < 40: self.y_mod = 40
 
     def pivotal_oscillator(self, x, y):
         # TODO - Better oscillating function or different block selection because rare blocks get clustered around
         #       the top left edge of each section (unless that is the goal?) - One that hits higher values for longer
-        # TODO - Test and see empirically how well mixed the pivotal blocks are!
 
         oscillator = abs(
             100 * sin((x % self.x_mod) + (y % self.y_mod)) / (
