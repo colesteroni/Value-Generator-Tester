@@ -3,16 +3,14 @@
 from map_generator import Generator
 
 
-
 def map_o_piv_o_tal():
 
     generator = Generator()
 
-    state_list = []
-
-    [state_list.append(
-        [generator.pivotal_state(len(state_list), y) for y in range(0, generator.y_mod)]
-    ) for x in range(0, generator.x_mod)]
+    state_list = [
+        [generator.pivotal_state(x, y) for y in range(0, generator.y_mod)]
+        for x in range(0, generator.x_mod)
+    ]
 
     [print(row) for row in state_list]
 

@@ -69,12 +69,9 @@ class Generator(object):
         return state
 
     def generate(self, range_x, range_y):
-        cell_list = []
-
-        for x in range(range_x[0], range_x[1]):
-            cell_list.append([])
-
-            for y in range(range_y[0], range_y[1]):
-                cell_list[x - range_x[0]].append(Cell(self.display, self.get_state(x, y), x, y))
+        cell_list = [
+            [Cell(self.display, self.get_state(x, y), x, y) for y in range(range_y[0], range_y[1])]
+            for x in range(range_x[0], range_x[1])
+        ]
 
         return cell_list
