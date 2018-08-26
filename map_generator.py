@@ -1,4 +1,7 @@
 # Map generator
+# Every section_l blocks there will be a block chosen by a certain number in the seed fed into a formula
+# the blocks around these pivotal blocks will be chosen by a voting system of the pivotal blocks that
+# have wants based on the seed and influence based on their distance from the block being selected
 
 from cell import Cell
 
@@ -36,20 +39,16 @@ class Generator(object):
         for n in range(0, len(self.seed)):
             seed_dict[n](self.seed[n])
 
-        # If string not quite long enough
         if len(seed) < len(seed_dict):
             for i in range(len(seed_dict) - len(seed), len(seed_dict)):
                 seed_dict[n](random.randint(0, 15))
 
-        # Ensure variable hard requirements met
+        # Ensure hard requirements met
         if self.x_mod < 40: self.x_mod = 40
 
         if self.y_mod < 40: self.y_mod = 40
 
     def pivotal_oscillator(self, x, y):
-        # TODO - Better oscillating function or different block selection because rare blocks get clustered around
-        #       the top left edge of each section (unless that is the goal?) - One that hits higher values for longer
-
         oscillator = abs(
             100 * sin((x % self.x_mod) + (y % self.y_mod)) / (
                 (x % self.x_mod) + (y % self.y_mod) if not (x % self.x_mod) + (y % self.y_mod) == 0 else 44)
@@ -70,18 +69,13 @@ class Generator(object):
             return 3
 
     def get_state(self, x, y):
-        # Every section_l blocks there will be a block chosen by a certain number in the seed fed into a formula
-        # the blocks around these pivotal blocks will be chosen by a voting system of the pivotal blocks that
-        # have wants based on the seed and influence based on their distance from the block being selected
         if not x % section_l and not y % section_l:  # is pivotal block
-            # Will use oscillating function with weights determined by the seed to chose pivotal blocks
-
             state = self.pivotal_state(x, y)
 
         else:
-            if (x + y) % 2:  # is odd block
+            if (x + y) % 2:
                 state = 4
-            else:  # is even block
+            else:
                 state = 6
 
         return state

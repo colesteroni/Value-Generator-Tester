@@ -23,7 +23,6 @@ class Map(object):
         )
 
     def render(self, cell_list=None):
-        # TODO - Make more efficient than copying whole list of objects
         cell_list = cell_list if cell_list else self.cell_list
 
         for column in cell_list:

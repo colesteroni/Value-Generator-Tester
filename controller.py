@@ -45,8 +45,6 @@ class Controller(object):
                 if event.key == self.control_dictionary['Down']:
                     self.keys_held['Down'] = False
 
-        # TODO - Move movement code?
-
         speed = vars_global.spectator_speed
 
         if self.keys_held['Left']:
