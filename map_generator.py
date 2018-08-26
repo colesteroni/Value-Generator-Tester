@@ -15,17 +15,19 @@ class Generator(object):
     def __init__(self, display=None, seed="3232"):
         self.display = display
 
-        self.x_mod = 0
-        self.y_mod = 0
+        self.x_length = 0
+        self.y_length = 0
+
+        self.cell_list = []
 
         def set_by_dict(key, digit, value):
             if type(value) is not int:
                 value = int("0x" + value, 0) * (1 if digit == 1 else ((digit - 1) * 16))
 
             if key is 'x_mod':
-                self.x_mod += value
+                self.x_length += value
             elif key is 'y_mod':
-                self.y_mod += value
+                self.y_length += value
 
         seed_dict = {
             0: (lambda value: set_by_dict('y_mod', 1, value)),
@@ -44,14 +46,14 @@ class Generator(object):
                 seed_dict[n](random.randint(0, 15))
 
         # Ensure hard requirements met
-        if self.x_mod < 40: self.x_mod = 40
+        if self.x_length < 40: self.x_length = 40
 
-        if self.y_mod < 40: self.y_mod = 40
+        if self.y_length < 40: self.y_length = 40
 
     def pivotal_oscillator(self, x, y):
         oscillator = abs(
-            100 * sin((x % self.x_mod) + (y % self.y_mod)) / (
-                (x % self.x_mod) + (y % self.y_mod) if not (x % self.x_mod) + (y % self.y_mod) == 0 else 44)
+            100 * sin((x % self.x_length) + (y % self.y_length)) / (
+                (x % self.x_length) + (y % self.y_length) if not (x % self.x_length) + (y % self.y_length) == 0 else 44)
         )
 
         return oscillator
@@ -72,11 +74,9 @@ class Generator(object):
         if not x % section_l and not y % section_l:  # is pivotal block
             state = self.pivotal_state(x, y)
 
-        else:
-            if (x + y) % 2:
-                state = 4
-            else:
-                state = 6
+        else: # is filler block
+            # find 4 or 2 surrounding pivotal blocks
+            state = 4
 
         return state
 
@@ -86,4 +86,9 @@ class Generator(object):
             for x in range(range_x[0], range_x[1])
         ]
 
-        return cell_list
+        for row in cell_list:
+            for cell in row:
+                if not cell.state:
+                    cell_list[cell_list.index(row)][row.index(cell)] = Cell(self.display, self.get_state(cell.x, cell.y), cell.x, cell.y)
+
+        self.cell_list = cell_list

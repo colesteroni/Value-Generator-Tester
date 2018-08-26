@@ -13,8 +13,8 @@ def prob_pivotal_block():
     for key in state_dict:
         counter.append([key, 0, 0])
 
-    for x in range(0, generator.x_mod):
-        for y in range(0, generator.y_mod):
+    for x in range(0, generator.x_length):
+        for y in range(0, generator.y_length):
             output = generator.pivotal_state(x, y)
 
             for i in range(0, len(counter)):

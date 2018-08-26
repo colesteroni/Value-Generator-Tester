@@ -5,19 +5,23 @@ import pygame
 
 import vars_global
 
-from file_io import read_control_dictionary, write_control_dictionary
+from file_io import access_control_dict
 
 
 class Controller(object):
     def __init__(self, slot):
         self.slot = slot
 
-        self.control_dictionary = read_control_dictionary(self.slot)
+        self.control_dictionary = access_control_dict(self.slot)
+
+        if not self.control_dictionary:
+            # aw geez
+            pass
 
         self.keys_held = {'Left': False, 'Right': False, 'Up': False, 'Down': False}
 
     def update_control_dictionary(self):
-        write_control_dictionary(self.slot, self.control_dictionary)
+        return access_control_dict(self.slot, control_dictionary=self.control_dictionary)
 
     def update(self):
         for event in pygame.event.get():

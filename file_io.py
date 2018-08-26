@@ -4,19 +4,24 @@ import pickle
 
 
 def read_startup_file():
-    with open('data/startup.dat', 'rb') as f:
-        startup_dict = pickle.load(f)
+    try:
+        with open('data/startup.dat', 'rb') as startup_file:
+            return pickle.load(startup_file)
 
-        return startup_dict
-
-
-def read_control_dictionary(slot):
-    with open('data/controller_schemes/{}.dat'.format(slot), 'rb') as f_control_dictionary:
-        control_dictionary = pickle.load(f_control_dictionary)
-
-        return control_dictionary
+    except (pickle.UnpicklingError, AttributeError, EOFError, ImportError, IndexError) as e:
+        print("Pickle cannot unpickle startup file because {}".format(e))
 
 
-def write_control_dictionary(slot, control_dictionary):
-    with open('data/controller_schemes/{}.dat'.format(slot), 'wb') as f_control_dictionary:
-        pickle.dump(control_dictionary, f_control_dictionary)
+def access_control_dict(slot, control_dictionary=None):
+    with open('data/controller_schemes/{}.dat'.format(slot), ('wb' if control_dictionary else 'rb')) as control_scheme:
+        try:
+            if control_dictionary:
+                pickle.dump(control_dictionary, control_scheme)
+                return True
+            else:
+                return pickle.load(control_scheme)
+
+        except (pickle.UnpicklingError, AttributeError, EOFError, ImportError, IndexError) as e:
+            print("Pickle cannot unpickle controller @ slot {} because {}".format(slot, e))
+            return False
+

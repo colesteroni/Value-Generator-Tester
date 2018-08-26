@@ -6,6 +6,8 @@
 * Render rest of blocks other than pivotal
 * Dynamic FPS
 * Make player & add movement code to it
+* Test file_io error handling
+* Add what to do if controller fails to load - dont overdo exception handling, breaks can often be inferred
 
 * Part 2 *
 * Make more modular
@@ -14,3 +16,6 @@
 * Make hard for error to occur by way program & data structures are designed
 * Make better use of the language
 * Make more efficient
+
+* Part 3 *
+* Find way to make awesome
