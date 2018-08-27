@@ -8,6 +8,8 @@ import vars_global
 
 
 class Cell(object):
+    size = 50
+
     def __init__(self, display, state, x, y):
         self.display = display
 
@@ -16,7 +18,7 @@ class Cell(object):
 
         self.state = state
 
-        self.size = 50
+        self.size = Cell.size
 
         self.surface = pygame.Surface((self.size, self.size))
 

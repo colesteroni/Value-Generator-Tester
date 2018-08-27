@@ -1,7 +1,6 @@
 * TODO * * Items not in order, just parts
 * Part 1 *
 * Better oscillating function - currently all rare values stuck around (0, 0)
-* Add mouse ability to see what block you are hovering above
 * Pre-Generate pivotal blocks based on where player is in map
 * Render rest of blocks other than pivotal
 * Dynamic FPS
