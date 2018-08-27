@@ -9,6 +9,8 @@ from vars_constant import bg, fps
 
 
 def main(display, clock, map, controller):
+    if not controller.control_dictionary: return "Failed to load control dictionary"
+
     while True:
         #  Updating
 

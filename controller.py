@@ -20,10 +20,6 @@ class Controller(object):
 
         self.control_dictionary = access_control_dict(self.slot)
 
-        if not self.control_dictionary:
-            # aw geez
-            pass
-
         self.buttons_held = {'Mouse Left': False, 'Left': False, 'Right': False, 'Up': False, 'Down': False}
 
         self.last_output = int(round(time.time() * 1000))
