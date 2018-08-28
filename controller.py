@@ -68,7 +68,7 @@ class Controller(object):
             mouse_pos = pygame.mouse.get_pos()
             print("(" +
                   str(floor((mouse_pos[0] + vars_global.spectator_x) / Cell.size)) + ", " +
-                  str(floor((mouse_pos[1] + vars_global.spectator_y) / Cell.size)) + ")"
+                  str(floor((mouse_pos[1] - vars_global.spectator_y) / Cell.size)) + ")"
                   )
 
         speed = vars_global.spectator_speed
