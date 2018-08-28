@@ -48,15 +48,12 @@ class Generator(object):
 
         if vars_global.y_length < 40: vars_global.y_length = 40
 
-        self.pivotals_cached = set((0, 0))
-        self.pivotal_cache = [Cell(self.display, 0, 0)]
-
     def generate(self, range_x, range_y):
         for x in range(-vars_global.x_length, vars_global.x_length):
             for y in range(-vars_global.y_length, vars_global.y_length):
-                if (x, y) not in self.pivotals_cached:
-                    self.pivotals_cached.add((x, y))
-                    self.pivotal_cache.append(Cell(self.display, x, y))
+                if (x, y) not in vars_global.pivotals_cached:
+                    vars_global.pivotals_cached.add((x, y))
+                    vars_global.pivotal_cache.append(Cell(self.display, x, y))
 
         cell_list = [
             [Cell(self.display, x, y) for y in range(range_y[0], range_y[1])]
@@ -89,6 +86,27 @@ def pivotal_state(x, y):
         return 3
 
 
+def filler_state(x, y):
+    # get x and y values for what should be pivotals
+    dx = x % vars_global.x_length
+    dy = y % vars_global.y_length
+
+    x1 = x - dx
+    x2 = x + (vars_global.x_length - dx) if dx else None
+    y1 = y - dy
+    y2 = y + (vars_global.y_length - dy) if dy else None
+
+    surrounding_pivotals = [(x1, y1)]
+    surrounding_pivotals += [(x2, y1)] if dx else []
+    surrounding_pivotals += [(x1, y2)] if dy else []
+    surrounding_pivotals += [(x2, y2)] if dx and dy else []
+
+    print(surrounding_pivotals)
+    # get 2/4 surrounding pivotals
+
+    return 4
+
+
 def get_state(x=None, y=None, cell=None):
     if x is None:
         x = cell.x
@@ -99,8 +117,7 @@ def get_state(x=None, y=None, cell=None):
     if not x % section_l and not y % section_l:  # is pivotal block
         state = pivotal_state(x, y)
 
-    else: # is filler block
-        # find 4 or 2 surrounding pivotal blocks
-        state = 4
+    else:  # is filler block
+        state = filler_state(x, y)
 
     return state

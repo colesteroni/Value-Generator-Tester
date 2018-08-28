@@ -1,11 +1,14 @@
 * TODO * * Items not in order, just parts
 * Part 1 *
+* Fix x_length and y_length interpreting
+* Refactor generator, map, cell to make more efficient
 * Better oscillating function - currently all rare values stuck around (0, 0)
 * Render rest of blocks other than pivotal
 * Dynamic FPS
 * Make player & add movement code to it
 
 * Part 2 *
+* Add secondary pivotal cache since x_length - 1 * y_length - 1 blocks will be using the same 4 pivotals each time
 * Make more modular
 * Make code very readable w/out need for comments
 * More intuitive
