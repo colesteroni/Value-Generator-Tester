@@ -6,17 +6,19 @@ from colors import *
 from vars_constant import state_dict
 import vars_global
 
+import map_generator
+
 
 class Cell(object):
     size = 50
 
-    def __init__(self, display, state, x, y):
+    def __init__(self, display, x, y, state=None):
         self.display = display
 
         self.x = x
         self.y = y
 
-        self.state = state
+        self.state = state if state else map_generator.get_state(x, y)
 
         self.size = Cell.size
 
