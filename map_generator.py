@@ -12,8 +12,6 @@ from math import sin
 import random
 
 
-
-
 class Generator(object):
     def __init__(self, display=None, seed="3232"):
         self.display = display
@@ -54,15 +52,16 @@ class Generator(object):
         self.pivotal_cache = [Cell(self.display, 0, 0)]
 
     def generate(self, range_x, range_y):
+        for x in range(-vars_global.x_length, vars_global.x_length):
+            for y in range(-vars_global.y_length, vars_global.y_length):
+                if (x, y) not in self.pivotals_cached:
+                    self.pivotals_cached.add((x, y))
+                    self.pivotal_cache.append(Cell(self.display, x, y))
+
         cell_list = [
             [Cell(self.display, x, y) for y in range(range_y[0], range_y[1])]
             for x in range(range_x[0], range_x[1])
         ]
-
-        for row in cell_list:
-            for cell in row:
-                if not cell.state:
-                    cell_list[cell_list.index(row)][row.index(cell)] = Cell(self.display, cell.x, cell.y)
 
         self.cell_list = cell_list
 
@@ -70,7 +69,8 @@ class Generator(object):
 def pivotal_oscillator(x, y):
     oscillator = abs(
         100 * sin((x % vars_global.x_length) + (y % vars_global.y_length)) / (
-            (x % vars_global.x_length) + (y % vars_global.y_length) if not (x % vars_global.x_length) + (y % vars_global.y_length) == 0 else 44)
+            (x % vars_global.x_length) + (y % vars_global.y_length) if not (x % vars_global.x_length) + (
+                        y % vars_global.y_length) == 0 else 44)
     )
 
     return oscillator
