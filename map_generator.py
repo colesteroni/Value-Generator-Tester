@@ -3,7 +3,7 @@
 # the blocks around these pivotal blocks will be chosen by a voting system of the pivotal blocks that
 # have wants based on the seed and influence based on their distance from the block being selected
 
-from cell import Cell
+import map
 
 from vars_constant import section_l
 import vars_global
@@ -13,8 +13,10 @@ import random
 
 
 class Generator(object):
-    def __init__(self, display=None, seed="3232"):
-        self.display = display
+    def __init__(self, map, seed="3232"):
+        self.map = map
+
+        self.display = map.display
 
         self.cell_list = []
 
@@ -53,10 +55,10 @@ class Generator(object):
             for y in range(-vars_global.y_length, vars_global.y_length):
                 if (x, y) not in vars_global.pivotals_cached:
                     vars_global.pivotals_cached.add((x, y))
-                    vars_global.pivotal_cache.append(Cell(self.display, x, y))
+                    vars_global.pivotal_cache.append(map.Map.Cell(self.map, x, y))
 
         cell_list = [
-            [Cell(self.display, x, y) for y in range(range_y[0], range_y[1])]
+            [map.Map.Cell(self.map, x, y) for y in range(range_y[0], range_y[1])]
             for x in range(range_x[0], range_x[1])
         ]
 
@@ -101,7 +103,7 @@ def filler_state(x, y):
     surrounding_pivotals += [(x1, y2)] if dy else []
     surrounding_pivotals += [(x2, y2)] if dx and dy else []
 
-    print(surrounding_pivotals)
+    #print(surrounding_pivotals)
     # get 2/4 surrounding pivotals
 
     return 4

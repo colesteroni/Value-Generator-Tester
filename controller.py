@@ -7,7 +7,7 @@ import vars_global
 
 from file_io import access_control_dict
 
-from cell import Cell
+from map import Map
 
 from math import floor
 
@@ -67,8 +67,8 @@ class Controller(object):
             self.last_output = int(round(time.time() * 1000))
             mouse_pos = pygame.mouse.get_pos()
             print("(" +
-                  str(floor((mouse_pos[0] + vars_global.spectator_x) / Cell.size)) + ", " +
-                  str(floor((mouse_pos[1] - vars_global.spectator_y) / Cell.size)) + ")"
+                  str(floor((mouse_pos[0] + vars_global.spectator_x) / Map.Cell.size)) + ", " +
+                  str(floor((mouse_pos[1] - vars_global.spectator_y) / Map.Cell.size)) + ")"
                   )
 
         speed = vars_global.spectator_speed
