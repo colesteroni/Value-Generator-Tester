@@ -3,67 +3,14 @@
 # the blocks around these pivotal blocks will be chosen by a voting system of the pivotal blocks that
 # have wants based on the seed and influence based on their distance from the block being selected
 
-import map
-
 from vars_constant import section_l
 import vars_global
 
 from math import sin
 import random
 
-
 class Generator(object):
-    def __init__(self, map, seed="3232"):
-        self.map = map
-
-        self.display = map.display
-
-        self.cell_list = []
-
-        def set_by_dict(key, digit, value):
-            if type(value) is not int:
-                value = int("0x" + value, 0) * (1 if digit == 1 else ((digit - 1) * 16))
-
-            if key is 'x_mod':
-                vars_global.x_length += value
-            elif key is 'y_mod':
-                vars_global.y_length += value
-
-        seed_dict = {
-            0: (lambda value: set_by_dict('y_mod', 1, value)),
-            1: (lambda value: set_by_dict('y_mod', 2, value)),
-            2: (lambda value: set_by_dict('x_mod', 1, value)),
-            3: (lambda value: set_by_dict('x_mod', 2, value))
-        }
-
-        self.seed = seed[::-1].upper()
-
-        for n in range(0, len(self.seed)):
-            seed_dict[n](self.seed[n])
-
-        if len(seed) < len(seed_dict):
-            for i in range(len(seed_dict) - len(seed), len(seed_dict)):
-                seed_dict[n](random.randint(0, 15))
-
-        # Ensure hard requirements met
-        if vars_global.x_length < 40: vars_global.x_length = 40
-
-        if vars_global.y_length < 40: vars_global.y_length = 40
-
-    def generate(self, range_x, range_y):
-        for x in range(-vars_global.x_length, vars_global.x_length):
-            for y in range(-vars_global.y_length, vars_global.y_length):
-                if (x, y) not in vars_global.pivotals_cached:
-                    vars_global.pivotals_cached.add((x, y))
-                    vars_global.pivotal_cache.append(map.Map.Cell(self.map, x, y))
-
-        cell_list = [
-            [map.Map.Cell(self.map, x, y) for y in range(range_y[0], range_y[1])]
-            for x in range(range_x[0], range_x[1])
-        ]
-
-        self.cell_list = cell_list
-
+    pass
 
 def pivotal_oscillator(x, y):
     oscillator = abs(
