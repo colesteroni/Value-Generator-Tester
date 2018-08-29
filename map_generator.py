@@ -7,10 +7,7 @@ from vars_constant import section_l
 import vars_global
 
 from math import sin
-import random
 
-class Generator(object):
-    pass
 
 def pivotal_oscillator(x, y):
     oscillator = abs(

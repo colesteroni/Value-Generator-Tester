@@ -1,6 +1,5 @@
 * TODO * * Items not in order, just parts
 * Part 1 *
-* Make generator subclasses of map
 * Update all code to reflect new map structure
 * move cell list, pivotal cache to map
 

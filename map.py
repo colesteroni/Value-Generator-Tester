@@ -27,9 +27,9 @@ import vars_global
 
 
 class Map(object):
-    def __init__(self, display, generator=None):
+    def __init__(self, display=None):
         self.display = display
-        self.wakka = 'cool as a cucumber man'
+
         self.generator = self.Generator(self)
 
         self.generator.generate(

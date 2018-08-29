@@ -1,21 +1,26 @@
 # This is meant to solve the probability of a block spawning based on seed & formulas in use
 
 from vars_constant import state_dict
+import vars_global
 
-from map_generator import Generator
+from map import Map
+
+from map_generator import pivotal_state
 
 
 def prob_pivotal_block():
-    generator = Generator()
+    map = Map()
+
+    generator = map.Generator(map)
 
     counter = []
 
     for key in state_dict:
         counter.append([key, 0, 0])
 
-    for x in range(0, generator.x_length):
-        for y in range(0, generator.y_length):
-            output = generator.pivotal_state(x, y)
+    for x in range(0, vars_global.x_length):
+        for y in range(0, vars_global.y_length):
+            output = pivotal_state(x, y)
 
             for i in range(0, len(counter)):
                 if int(output) == counter[i][0]:
