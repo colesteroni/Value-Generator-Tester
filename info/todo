@@ -1,26 +1,25 @@
 * TODO * * Items not in order, just parts
 * Part 1 *
 * Update all code to reflect new map structure
-* move cell list, pivotal cache to map
-
-* Fix x_length and y_length interpreting
-* Refactor generator, map, cell to make more efficient
-* Better oscillating function - currently all rare values stuck around (0, 0)
-* Render rest of blocks other than pivotal
+* Move cell list, pivotal cache to map
+* Fix x_length and y_length interpreting -> currently a x/y length of 50 is 10 blocks
+* Better oscillating function - currently all rare values stuck around (0, 0) -> Find some good papers on oscillating functions
+* Render filler(non-pivotal blocks)
 * Dynamic FPS
 * Make player & add movement code to it
 
 * Part 2 *
+* Interchangeable generators
+* Ability to compare generator functions
 * Add secondary pivotal cache since x_length - 1 * y_length - 1 blocks will be using the same 4 pivotals each time
-* Make more modular
-* Make code very readable w/out need for comments
-* More intuitive
-* Make hard for error to occur by way program & data structures are designed
+* Make more modular (do a lot of refactoring)
+* Make code very readable w/out need for comments !!!
+* Improve usability
+* Make hard for error to occur by way program is designed
 * Make better use of the language
-* Make more efficient
 * Implement more efficient data structures
-* Change when pivotals are pregenerated
-* Empty pivotal pre-generated periodically
+* Change when pivotals are pre-generated
+* Empty pivotal cache periodically
 
 * Part 3 *
-* Find way to make awesome
+* Find ways to grow project
