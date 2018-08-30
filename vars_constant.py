@@ -10,3 +10,6 @@ bg = white
 fps = 60
 
 state_dict = {0: black, 1: red, 2: green, 3: blue, 4: faint_red, 5: faint_green, 6: faint_blue}
+
+default_x_pivotal_gap = 10
+default_y_pivotal_gap = 10

@@ -10,47 +10,42 @@ from math import sin
 
 def pivotal_oscillator(x, y):
     oscillator = abs(
-        100 * sin((x % vars_global.x_length) + (y % vars_global.y_length)) / (
-            (x % vars_global.x_length) + (y % vars_global.y_length) if not (x % vars_global.x_length) + (
-                        y % vars_global.y_length) == 0 else 44)
+        100 * sin(x + y) / (
+            x + y if not x + (
+                        y) == 0 else 44)
     )
 
     return oscillator
 
 
-def pivotal_state(x, y):
-    xx = x / vars_global.x_length
-    yy = y / vars_global.y_length
-
-    oscillator = pivotal_oscillator(xx, yy)
-
-    if oscillator < .8:
+def pivotal_filter(value):
+    if value < 2:
         return 0
-    elif oscillator < 2.8:
+    elif value < 5:
         return 1
-    elif oscillator < 5:
+    elif value < 8:
         return 2
     else:
         return 3
 
 
+def pivotal_state(xx, yy):
+    return pivotal_filter(pivotal_oscillator(xx, yy))
+
+
 def filler_state(x, y):
-    # get x and y values for what should be pivotals
-    dx = x % vars_global.x_length
-    dy = y % vars_global.y_length
+    dx = x % vars_global.x_pivotal_gap
+    dy = y % vars_global.y_pivotal_gap
 
     x1 = x - dx
-    x2 = x + (vars_global.x_length - dx) if dx else None
+    x2 = x + (vars_global.x_pivotal_gap - dx) if dx else None
     y1 = y - dy
-    y2 = y + (vars_global.y_length - dy) if dy else None
+    y2 = y + (vars_global.y_pivotal_gap - dy) if dy else None
 
     surrounding_pivotals = [(x1, y1)]
     surrounding_pivotals += [(x2, y1)] if dx else []
     surrounding_pivotals += [(x1, y2)] if dy else []
     surrounding_pivotals += [(x2, y2)] if dx and dy else []
-
-    #print(surrounding_pivotals)
-    # get 2/4 surrounding pivotals
 
     return 4
 
@@ -62,8 +57,11 @@ def get_state(x=None, y=None, cell=None):
     if y is None:
         y = cell.y
 
-    if not x % vars_global.x_length and not y % vars_global.y_length:  # is pivotal block
-        state = pivotal_state(x, y)
+    if not x % vars_global.x_pivotal_gap and not y % vars_global.y_pivotal_gap:  # is pivotal block
+        xx = x / vars_global.x_pivotal_gap
+        yy = y / vars_global.y_pivotal_gap
+
+        state = pivotal_state(xx, yy)
 
     else:  # is filler block
         state = filler_state(x, y)

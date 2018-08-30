@@ -2,20 +2,14 @@
 
 * Part 1 *
 
-* Move cell list, pivotal cache to map
-* Better oscillating function - currently all rare values stuck around (0, 0) -> Find some good papers on oscillating functions
-* Render filler(non-pivotal blocks)
-* Dynamic FPS
-* Make player & add movement code to it
-* Pause button
+* Better oscillating function - currently all rare values stuck around (0, 0)
+* Render filler(non-pivotal) blocks
+* Make player & add movement code to it + editing blocks + placing items on blocks
+* Improve seed handler
 * Interchangeable generators
 * Comparative generation functions
-* Editing blocks with player
-* Placing items on blocks
-* Give better names to the whole process. IE filter, better word for oscillator and the like
-* Dynamic seed unless set
+* Unit test manager
 * Basic unit tests
-* Section length before oscillator is looped
 
 * Part 2 * Come back after working on more projects and then improve this one with newly learned skills & fresh view *
 

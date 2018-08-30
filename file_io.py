@@ -25,6 +25,7 @@ def access_control_dict(slot, control_dictionary=None):
             except (pickle.UnpicklingError, AttributeError, EOFError, ImportError, IndexError) as e:
                 print("Pickle cannot unpickle controller @ slot {} because {}".format(slot, e))
                 return False
+
     except OSError as e:
         print("Error accessing control_schemes/{}.dat because {}".format(slot, e))
         return False

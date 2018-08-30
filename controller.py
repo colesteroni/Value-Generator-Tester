@@ -14,18 +14,25 @@ from math import floor
 import time
 
 
+default_control_scheme = {'Left': pygame.K_a, 'Right': pygame.K_d, 'Up': pygame.K_w, 'Down': pygame.K_s}
+
+
 class Controller(object):
     def __init__(self, slot):
         self.slot = slot
 
-        self.control_dictionary = access_control_dict(self.slot)
+        self.control_scheme = access_control_dict(self.slot)
+
+        if not self.control_scheme:
+            print("Loading default control scheme")
+            self.control_scheme = default_control_scheme
 
         self.buttons_held = {'Mouse Left': False, 'Left': False, 'Right': False, 'Up': False, 'Down': False}
 
-        self.last_output = int(round(time.time() * 1000))
+        self.last_log_time = int(round(time.time() * 1000))
 
     def update_control_dictionary(self):
-        return access_control_dict(self.slot, control_dictionary=self.control_dictionary)
+        return access_control_dict(self.slot, control_dictionary=self.control_scheme)
 
     def update(self):
         for event in pygame.event.get():
@@ -44,27 +51,27 @@ class Controller(object):
                     self.buttons_held['Mouse Left'] = False
 
             if event.type == pygame.KEYDOWN:
-                if event.key == self.control_dictionary['Left']:
+                if event.key == self.control_scheme['Left']:
                     self.buttons_held['Left'] = True
-                if event.key == self.control_dictionary['Right']:
+                if event.key == self.control_scheme['Right']:
                     self.buttons_held['Right'] = True
-                if event.key == self.control_dictionary['Up']:
+                if event.key == self.control_scheme['Up']:
                     self.buttons_held['Up'] = True
-                if event.key == self.control_dictionary['Down']:
+                if event.key == self.control_scheme['Down']:
                     self.buttons_held['Down'] = True
 
             if event.type == pygame.KEYUP:
-                if event.key == self.control_dictionary['Left']:
+                if event.key == self.control_scheme['Left']:
                     self.buttons_held['Left'] = False
-                if event.key == self.control_dictionary['Right']:
+                if event.key == self.control_scheme['Right']:
                     self.buttons_held['Right'] = False
-                if event.key == self.control_dictionary['Up']:
+                if event.key == self.control_scheme['Up']:
                     self.buttons_held['Up'] = False
-                if event.key == self.control_dictionary['Down']:
+                if event.key == self.control_scheme['Down']:
                     self.buttons_held['Down'] = False
 
-        if self.buttons_held['Mouse Left'] and self.last_output + 500 <= int(round(time.time() * 1000)):
-            self.last_output = int(round(time.time() * 1000))
+        if self.buttons_held['Mouse Left'] and self.last_log_time + 500 <= int(round(time.time() * 1000)):
+            self.last_log_time = int(round(time.time() * 1000))
             mouse_pos = pygame.mouse.get_pos()
             print("(" +
                   str(floor((mouse_pos[0] + vars_global.spectator_x) / Map.Cell.size)) + ", " +
@@ -75,21 +82,15 @@ class Controller(object):
 
         if self.buttons_held['Left']:
             vars_global.spectator_x -= speed
-            vars_global.spectator_x -= 1
         if self.buttons_held['Right']:
             vars_global.spectator_x += speed
-            vars_global.spectator_x += 1
         if self.buttons_held['Up']:
             vars_global.spectator_y += speed
-            vars_global.spectator_y += 1
         if self.buttons_held['Down']:
             vars_global.spectator_y -= speed
-            vars_global.spectator_y -= 1
 
-        if (self.buttons_held['Left'] or self.buttons_held['Right'] or \
-                self.buttons_held['Up'] or self.buttons_held['Down']) \
-                and self.last_output + 500 <= int(round(time.time() * 1000)):
-            self.last_output = int(round(time.time() * 1000))
+        if True in self.buttons_held.values() and self.last_log_time + 1000 <= int(round(time.time() * 1000)):
+            self.last_log_time = int(round(time.time() * 1000))
             print("Spectator Pos: ({}, {})".format(vars_global.spectator_x, vars_global.spectator_y))
             return True
 

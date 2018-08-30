@@ -3,24 +3,19 @@
 from vars_constant import state_dict
 import vars_global
 
-from map import Map
-
 from map_generator import pivotal_state
 
 
 def prob_pivotal_block():
-    map = Map()
-
-    generator = map.Generator(map)
 
     counter = []
 
     for key in state_dict:
         counter.append([key, 0, 0])
 
-    for x in range(0, vars_global.x_length):
-        for y in range(0, vars_global.y_length):
-            output = pivotal_state(x, y)
+    for xx in range(0, vars_global.x_section_length):
+        for yy in range(0, vars_global.y_section_length):
+            output = pivotal_state(xx, yy)
 
             for i in range(0, len(counter)):
                 if int(output) == counter[i][0]:
@@ -33,7 +28,7 @@ def prob_pivotal_block():
         total += item[1]
 
     for item in counter:
-        item[2] = item[1] / total * 100
+        item[2] = (str(item[1] / total * 100) if total > 0 else "0") + '%'
 
     print(counter)
 

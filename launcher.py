@@ -11,7 +11,7 @@ from map import Map
 
 from controller import Controller
 
-import main
+from main import main
 
 
 def launch():
@@ -23,7 +23,7 @@ def launch():
 
     pygame.display.set_caption("2d Cell Engine by Cole")
 
-    print(main.main(display, pygame.time.Clock(), Map(display), Controller(startup_dict['Control Slot'])))
+    print(main(display, pygame.time.Clock(), Map(display), Controller(startup_dict['Control Slot'])))
 
 
 if __name__ == "__main__":
