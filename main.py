@@ -6,11 +6,11 @@ import pygame
 from vars_constant import bg, fps
 
 
-def main(display, clock, cell_map, controller):
+def main(display, clock, cell_map, player, controller):
     while True:
         #  Updating
 
-        controller.update()
+        controller.update()  # invokes player.update()
 
         cell_map.update()
 
@@ -19,6 +19,8 @@ def main(display, clock, cell_map, controller):
         display.fill(bg)
 
         cell_map.render()
+
+        player.render()
 
         pygame.display.flip()
 

@@ -4,7 +4,6 @@
 
 * Better oscillating function - currently all rare values stuck around (0, 0)
 * Render filler(non-pivotal) blocks
-* Make player & add movement code to it + editing blocks + placing items on blocks
 * Improve seed handler
 * Interchangeable generators
 * Comparative generation functions

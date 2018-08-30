@@ -46,17 +46,17 @@ class Map(object):
     class Cell(object):
         size = 50
 
-        def __init__(self, map, x, y, state=None):
-            self.map = map
+        def __init__(self, cell_map, x, y, state=None):
+            self.cell_map = cell_map
 
-            self.display = map.display
+            self.display = self.cell_map.display
 
             self.x = x
             self.y = y
 
             self.state = state if state else map_generator.get_state(x, y)
 
-            self.size = Map.Cell.size
+            self.size = self.cell_map.Cell.size
 
             self.surface = pygame.Surface((self.size, self.size))
 
@@ -80,10 +80,8 @@ class Map(object):
             self.display.blit(self.surface, self.rect)
 
     class Generator(object):
-        def __init__(self, map, seed="0A0A"):
-            self.map = map
-
-            self.display = map.display
+        def __init__(self, cell_map, seed="0A0A"):
+            self.cell_map = cell_map
 
             self.cell_list = []
 
@@ -123,12 +121,12 @@ class Map(object):
         def generate(self, range_x, range_y):
             for x in range(-vars_global.x_pivotal_gap, vars_global.x_pivotal_gap):
                 for y in range(-vars_global.y_pivotal_gap, vars_global.y_pivotal_gap):
-                    if (x, y) not in self.map.pivotals_cached:
-                        self.map.pivotals_cached.add((x, y))
-                        self.map.pivotal_cache.append(self.map.Cell(self.map, x, y))
+                    if (x, y) not in self.cell_map.pivotals_cached:
+                        self.cell_map.pivotals_cached.add((x, y))
+                        self.cell_map.pivotal_cache.append(self.cell_map.Cell(self.cell_map, x, y))
 
             cell_list = [
-                [self.map.Cell(self.map, x, y) for y in range(range_y[0], range_y[1])]
+                [self.cell_map.Cell(self.cell_map, x, y) for y in range(range_y[0], range_y[1])]
                 for x in range(range_x[0], range_x[1])
             ]
 

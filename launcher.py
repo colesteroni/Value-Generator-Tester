@@ -9,6 +9,8 @@ from vars_constant import screen_width, screen_height
 
 from map import Map
 
+from player import Player
+
 from controller import Controller
 
 from main import main
@@ -23,7 +25,11 @@ def launch():
 
     pygame.display.set_caption("2d Cell Engine by Cole")
 
-    print(main(display, pygame.time.Clock(), Map(display), Controller(startup_dict['Control Slot'])))
+    cell_map = Map(display)
+
+    player = Player(cell_map)
+
+    print(main(display, pygame.time.Clock(), cell_map, player, Controller(startup_dict['Control Slot'], player)))
 
 
 if __name__ == "__main__":

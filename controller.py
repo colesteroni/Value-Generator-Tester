@@ -18,8 +18,10 @@ default_control_scheme = {'Left': pygame.K_a, 'Right': pygame.K_d, 'Up': pygame.
 
 
 class Controller(object):
-    def __init__(self, slot):
+    def __init__(self, slot, player=None):
         self.slot = slot
+
+        self.player = player
 
         self.control_scheme = access_control_dict(self.slot)
 
@@ -78,16 +80,7 @@ class Controller(object):
                   str(floor((mouse_pos[1] - vars_global.spectator_y) / Map.Cell.size)) + ")"
                   )
 
-        speed = vars_global.spectator_speed
-
-        if self.buttons_held['Left']:
-            vars_global.spectator_x -= speed
-        if self.buttons_held['Right']:
-            vars_global.spectator_x += speed
-        if self.buttons_held['Up']:
-            vars_global.spectator_y += speed
-        if self.buttons_held['Down']:
-            vars_global.spectator_y -= speed
+        self.player.update(self.buttons_held)
 
         if True in self.buttons_held.values() and self.last_log_time + 1000 <= int(round(time.time() * 1000)):
             self.last_log_time = int(round(time.time() * 1000))
