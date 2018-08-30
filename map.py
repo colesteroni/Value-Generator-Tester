@@ -11,7 +11,6 @@ import vars_global
 # Taken directly from map_generator.py
 import map
 
-from vars_constant import section_l
 import vars_global
 
 from math import sin
@@ -87,7 +86,7 @@ class Map(object):
             self.display.blit(self.surface, self.rect)
 
     class Generator(object):
-        def __init__(self, map, seed="3232"):
+        def __init__(self, map, seed="0A0A"):
             self.map = map
 
             self.display = map.display
@@ -120,9 +119,9 @@ class Map(object):
                     seed_dict[n](random.randint(0, 15))
 
             # Ensure hard requirements met
-            if vars_global.x_length < 40: vars_global.x_length = 40
+            if vars_global.x_length < 10: vars_global.x_length = 10
 
-            if vars_global.y_length < 40: vars_global.y_length = 40
+            if vars_global.y_length < 10: vars_global.y_length = 10
 
         def generate(self, range_x, range_y):
             for x in range(-vars_global.x_length, vars_global.x_length):

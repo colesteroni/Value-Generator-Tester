@@ -3,7 +3,6 @@
 # the blocks around these pivotal blocks will be chosen by a voting system of the pivotal blocks that
 # have wants based on the seed and influence based on their distance from the block being selected
 
-from vars_constant import section_l
 import vars_global
 
 from math import sin
@@ -20,7 +19,10 @@ def pivotal_oscillator(x, y):
 
 
 def pivotal_state(x, y):
-    oscillator = pivotal_oscillator(x, y)
+    xx = x / vars_global.x_length
+    yy = y / vars_global.y_length
+
+    oscillator = pivotal_oscillator(xx, yy)
 
     if oscillator < .8:
         return 0
@@ -60,7 +62,7 @@ def get_state(x=None, y=None, cell=None):
     if y is None:
         y = cell.y
 
-    if not x % section_l and not y % section_l:  # is pivotal block
+    if not x % vars_global.x_length and not y % vars_global.y_length:  # is pivotal block
         state = pivotal_state(x, y)
 
     else:  # is filler block
