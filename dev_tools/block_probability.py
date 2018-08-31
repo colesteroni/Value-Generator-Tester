@@ -3,7 +3,7 @@
 from vars_constant import state_dict
 import vars_global
 
-from map_generator import pivotal_state
+from generator_demo import pivotal_state
 
 
 def prob_pivotal_block():

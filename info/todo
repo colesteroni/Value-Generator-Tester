@@ -1,15 +1,14 @@
-* TODO * * Items not in order, just parts
+* TODO *
 
 * Part 1 *
 
-* Better oscillating function - currently all rare values stuck around (0, 0)
 * Improve seed handler
-* Interchangeable generators
-* Comparative generation functions
 * Basic unit tests -> make sure filler distance function is accurate, oscillation function
 
-* Part 2 * Come back after working on more projects and then improve this one with newly learned skills & fresh view *
+* Part 2 * Will be done more slowly so I have time for other projects *
 
+* Parser to chose the generator object to test in command line
+* Much more tools to analyze maps
 * Add secondary pivotal cache since x_length - 1 * y_length - 1 blocks will be using the same 4 pivotals each time
 * Make more modular (do a lot of refactoring)
 * Make code very readable w/out need for comments !!!

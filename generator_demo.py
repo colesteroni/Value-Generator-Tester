@@ -8,6 +8,43 @@ import vars_global
 
 from math import sin, sqrt
 
+from seed import generate_seed
+
+
+def seed_interpreter(seed):
+    def set_by_dict(key, digit, value):
+        if type(value) is not int:
+            value = int("0x" + value, 0) * (1 if digit == 1 else ((digit - 1) * 16))
+
+        if key is 'x_mod':
+            vars_global.x_pivotal_gap += value
+        elif key is 'y_mod':
+            vars_global.y_pivotal_gap += value
+
+    seed_dict = {
+        0: (lambda value: set_by_dict('y_mod', 1, value)),
+        1: (lambda value: set_by_dict('y_mod', 2, value)),
+        2: (lambda value: set_by_dict('x_mod', 1, value)),
+        3: (lambda value: set_by_dict('x_mod', 2, value))
+    }
+
+    seed = seed[::-1].upper()
+
+    if len(seed) < len(seed_dict):
+        seed += generate_seed(len(seed_dict) - len(seed))
+
+    for n in range(0, len(seed)):
+        seed_dict[n](seed[n])
+
+    # Ensure hard requirements met
+    if vars_global.x_pivotal_gap < 10: vars_global.x_pivotal_gap = 10
+
+    if vars_global.y_pivotal_gap < 10: vars_global.y_pivotal_gap = 10
+
+    if vars_global.x_pivotal_gap > 40: vars_global.x_pivotal_gap = 40
+
+    if vars_global.y_pivotal_gap > 40: vars_global.y_pivotal_gap = 40
+
 
 def pivotal_oscillator(x, y):
     oscillator = abs(
@@ -79,24 +116,5 @@ def filler_state(x, y):
             if vote[1] > max_vote:
                 max_vote = vote[1]
                 state = vote[0]
-
-    return state
-
-
-def get_state(x=None, y=None, cell=None):
-    if x is None:
-        x = cell.x
-
-    if y is None:
-        y = cell.y
-
-    if not x % vars_global.x_pivotal_gap and not y % vars_global.y_pivotal_gap:  # is pivotal block
-        xx = x / vars_global.x_pivotal_gap
-        yy = y / vars_global.y_pivotal_gap
-
-        state = pivotal_state(xx, yy)
-
-    else:  # is filler block
-        state = filler_state(x, y)
 
     return state

@@ -2,16 +2,16 @@
 
 import pygame
 
-import map_generator
+import generators
 
 from vars_constant import state_dict, screen_width, screen_height
 import vars_global
 
-from seed import generate_seed
-
 
 class Map(object):
-    def __init__(self, display=None):
+    def __init__(self, display=None, gen_slot="Demo"):
+        self.gen_slot = gen_slot
+
         self.display = display
 
         self.pivotals_cached = set(())
@@ -31,7 +31,7 @@ class Map(object):
                 int(vars_global.spectator_x / 50) + int(screen_width / self.Cell.size) + 2
             ),
             (
-                int(vars_global.spectator_y / 50) - 10,
+                int(vars_global.spectator_y / 50) - int(screen_height / self.Cell.size),
                 int(vars_global.spectator_y / 50) + 2
             )
         )
@@ -51,10 +51,12 @@ class Map(object):
 
             self.display = self.cell_map.display
 
+            self.gen_slot = cell_map.gen_slot
+
             self.x = x
             self.y = y
 
-            self.state = state if state else map_generator.get_state(x, y)
+            self.state = state if state else self.cell_map.generator.get_state(x, y)
 
             self.size = self.cell_map.Cell.size
 
@@ -83,44 +85,33 @@ class Map(object):
         def __init__(self, cell_map, seed="0A0A"):
             self.cell_map = cell_map
 
+            self.gen_slot = cell_map.gen_slot
+
             self.cell_list = []
 
-            def set_by_dict(key, digit, value):
-                if type(value) is not int:
-                    value = int("0x" + value, 0) * (1 if digit == 1 else ((digit - 1) * 16))
-
-                if key is 'x_mod':
-                    vars_global.x_pivotal_gap += value
-                elif key is 'y_mod':
-                    vars_global.y_pivotal_gap += value
-
-            seed_dict = {
-                0: (lambda value: set_by_dict('y_mod', 1, value)),
-                1: (lambda value: set_by_dict('y_mod', 2, value)),
-                2: (lambda value: set_by_dict('x_mod', 1, value)),
-                3: (lambda value: set_by_dict('x_mod', 2, value))
-            }
-
-            self.seed = seed[::-1].upper()
-
-            if len(seed) < len(seed_dict):
-                self.seed += generate_seed(len(seed_dict) - len(seed))
-
-            for n in range(0, len(self.seed)):
-                seed_dict[n](self.seed[n])
-
-            # Ensure hard requirements met
-            if vars_global.x_pivotal_gap < 10: vars_global.x_pivotal_gap = 10
-
-            if vars_global.y_pivotal_gap < 10: vars_global.y_pivotal_gap = 10
-
-            if vars_global.x_pivotal_gap > 40: vars_global.x_pivotal_gap = 40
-
-            if vars_global.y_pivotal_gap > 40: vars_global.y_pivotal_gap = 40
+            generators.generator_dict[self.gen_slot].seed_interpreter(seed)
 
             print(
                 "Generated pivotal lengths - x: " + str(vars_global.x_section_length) + " y: " + str(vars_global.y_section_length)
             )
+
+        def get_state(self, x=None, y=None, cell=None):
+            if x is None:
+                x = cell.x
+
+            if y is None:
+                y = cell.y
+
+            if not x % vars_global.x_pivotal_gap and not y % vars_global.y_pivotal_gap:  # is pivotal block
+                xx = x / vars_global.x_pivotal_gap
+                yy = y / vars_global.y_pivotal_gap
+
+                state = generators.generator_dict[self.gen_slot].pivotal_state(xx, yy)
+
+            else:  # is filler block
+                state = generators.generator_dict[self.gen_slot].filler_chooser(x, y)
+
+            return state
 
         def generate(self, range_x, range_y):
             for x in range(-vars_global.x_pivotal_gap, vars_global.x_pivotal_gap):

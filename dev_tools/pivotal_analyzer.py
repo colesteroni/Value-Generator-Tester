@@ -3,7 +3,7 @@
 from vars_constant import default_x_pivotal_gap, default_y_pivotal_gap
 import vars_global
 
-from map_generator import pivotal_state
+from generator_demo import pivotal_state
 
 
 def map_o_piv_o_tal():
