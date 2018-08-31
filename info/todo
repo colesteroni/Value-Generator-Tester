@@ -6,7 +6,6 @@
 * Improve seed handler
 * Interchangeable generators
 * Comparative generation functions
-* Unit test manager
 * Basic unit tests -> make sure filler distance function is accurate, oscillation function
 
 * Part 2 * Come back after working on more projects and then improve this one with newly learned skills & fresh view *
