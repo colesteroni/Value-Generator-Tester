@@ -118,6 +118,10 @@ class Map(object):
 
             if vars_global.y_pivotal_gap > 40: vars_global.y_pivotal_gap = 40
 
+            print(
+                "Generated pivotal lengths - x: " + str(vars_global.x_section_length) + " y: " + str(vars_global.y_section_length)
+            )
+
         def generate(self, range_x, range_y):
             for x in range(-vars_global.x_pivotal_gap, vars_global.x_pivotal_gap):
                 for y in range(-vars_global.y_pivotal_gap, vars_global.y_pivotal_gap):
