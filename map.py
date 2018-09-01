@@ -9,12 +9,13 @@ import vars_global
 
 
 class Map(object):
-    def __init__(self, display=None, gen_slot="Demo"):
-        self.gen_slot = gen_slot
-
+    def __init__(self, display=None, gen_slot=None, seed=None):
         self.display = display
 
-        self.generator = self.Generator(self)
+        self.gen_slot = gen_slot
+
+        print("Creating generator object.")
+        self.generator = self.Generator(self, seed)
 
     def update(self):
         self.generator.generate()
@@ -72,9 +73,13 @@ class Map(object):
 
             self.cell_list = []
 
+            print("Done creating generator object.")
+            print("Interpreting seed.")
+
             generators.generator_dict[self.gen_slot].seed_interpreter(
-                seed, generators.generator_dict[self.gen_slot].var_dict
-            )
+                seed, generators.generator_dict[self.gen_slot].var_dict)
+
+            print("Done interpreting seed.")
 
         def get_state(self, x=None, y=None, cell=None):
             if x is None:
@@ -89,6 +94,4 @@ class Map(object):
 
         def generate(self):
             self.cell_list = generators.generator_dict[self.gen_slot].base_gen(
-                self.cell_map, generators.generator_dict[self.gen_slot].var_dict
-            )
-
+                self.cell_map, generators.generator_dict[self.gen_slot].var_dict)

@@ -23,11 +23,11 @@ def base_gen(cell_map, var_dict):
         int(vars_global.spectator_y / 50) + 2
     )
 
-    for x in range(-var_dict['x_pivotal_gap'], var_dict['x_pivotal_gap']):
-        for y in range(-var_dict['y_pivotal_gap'], var_dict['y_pivotal_gap']):
-            if (x, y) not in var_dict['pivotals_cached']:
-                var_dict['pivotals_cached'].add((x, y))
-                var_dict['pivotal_cache'].append(cell_map.Cell(cell_map, x, y))
+    #for x in range(-var_dict['x_pivotal_gap'], var_dict['x_pivotal_gap'], var_dict['x_pivotal_gap']):
+     #   for y in range(-var_dict['y_pivotal_gap'], var_dict['y_pivotal_gap'], var_dict['y_pivotal_gap']):
+      #      if (x, y) not in var_dict['pivotals_cached']:
+       #         var_dict['pivotals_cached'].append((x, y))
+        #        var_dict['pivotal_cache'].append(cell_map.Cell(cell_map, x, y))
 
     return [
         [cell_map.Cell(cell_map, x, y) for y in range(range_y[0], range_y[1])]
@@ -36,6 +36,9 @@ def base_gen(cell_map, var_dict):
 
 
 def seed_interpreter(seed, var_dict):
+    if not seed:
+        seed = generate_seed(4)
+
     def set_by_dict(key, digit, value):
         if type(value) is not int:
             value = int("0x" + value, 0) * (1 if digit == 1 else ((digit - 1) * 16))
@@ -61,18 +64,17 @@ def seed_interpreter(seed, var_dict):
         seed_dict[n](seed[n])
 
     # Ensure hard requirements met
-    if var_dict['x_pivotal_gap'] < 10: var_dict['x_pivotal_gap'] = 10
+    if var_dict['x_pivotal_gap'] < var_dict['min_x_pivotal_gap']:
+        var_dict['x_pivotal_gap'] = var_dict['min_x_pivotal_gap']
 
-    if var_dict['y_pivotal_gap'] < 10: var_dict['y_pivotal_gap'] = 10
+    if var_dict['y_pivotal_gap'] < var_dict['min_y_pivotal_gap']:
+        var_dict['y_pivotal_gap'] = var_dict['min_y_pivotal_gap']
 
-    if var_dict['x_pivotal_gap'] > 40: var_dict['x_pivotal_gap'] = 40
+    if var_dict['x_pivotal_gap'] > var_dict['max_x_pivotal_gap']:
+        var_dict['x_pivotal_gap'] = var_dict['max_x_pivotal_gap']
 
-    if var_dict['y_pivotal_gap'] > 40: var_dict['y_pivotal_gap'] = 40
-
-    print(
-        "Generated pivotal lengths - x: " + str(var_dict['x_section_length']) + " y: " + str(
-            var_dict['y_section_length'])
-    )
+    if var_dict['y_pivotal_gap'] > var_dict['max_y_pivotal_gap']:
+        var_dict['y_pivotal_gap'] = var_dict['max_y_pivotal_gap']
 
 
 def pivotal_oscillator(x, y):
@@ -109,13 +111,22 @@ def filler_state(x, y, var_dict):
     y1 = y - dy
     y2 = y + (var_dict['y_pivotal_gap'] - dy) if dy else None
 
-    var_dict['surrounding_pivotals'] = [[(x1, y1)]]
-    var_dict['surrounding_pivotals'] += [[(x2, y1)]] if dx else []
-    var_dict['surrounding_pivotals'] += [[(x1, y2)]]if dy else []
-    var_dict['surrounding_pivotals'] += [[(x2, y2)]] if dx and dy else []
+    surrounding_pivotals = [[(x1, y1)]]
+    surrounding_pivotals += [[(x2, y1)]] if dx else []
+    surrounding_pivotals += [[(x1, y2)]]if dy else []
+    surrounding_pivotals += [[(x2, y2)]] if dx and dy else []
 
-    for pivotal in var_dict['surrounding_pivotals']:
-        if x - pivotal[0][0] and y - pivotal[0][1]:
+    for pivotal in surrounding_pivotals:
+        if pivotal[0] not in var_dict['pivotals_cached']:
+            var_dict['pivotals_cached'].append(pivotal[0])
+            var_dict['pivotal_cache'].append(pivotal_state(pivotal[0][0] / map.Map.Cell.size, pivotal[0][1] / map.Map.Cell.size))
+            pivotal.append(pivotal_state(pivotal[0][0] / map.Map.Cell.size, pivotal[0][1] / map.Map.Cell.size))
+
+        else:
+            pivotal.append(var_dict['pivotal_cache'][var_dict['pivotals_cached'].index(pivotal[0])])
+
+    for pivotal in surrounding_pivotals:
+        if (x - pivotal[0][0]) and (y - pivotal[0][1]):
             pivotal.append(sqrt((x - pivotal[0][0])**2 + (y - pivotal[0][1])**2))
         elif x - pivotal[0][0]:
             pivotal.append(abs(x - pivotal[0][0]))
@@ -123,28 +134,20 @@ def filler_state(x, y, var_dict):
             pivotal.append(abs(y - pivotal[0][1]))
 
     # vote with weights based on distance & block weights
-    votes = [[key] for key in state_dict]
+    votes = [[key, 0] for key in state_dict]
 
-    for pivotal in var_dict['surrounding_pivotals']:
-        index = None
-
+    for pivotal in surrounding_pivotals:
         for i in range(0, len(votes)):
-            if votes[i][0] is pivotal_state(pivotal[0][0], pivotal[0][1]):
-                index = i
+            if votes[i][0] is pivotal[1]:
+                votes[i][1] += 1 * pivotal[2]
                 break
-
-        try:
-            votes[index][1] += 1 * pivotal[1]
-        except IndexError:
-            votes[index].append(1 * pivotal[1])
 
     state = 0
     max_vote = 0
     for vote in votes:
-        if len(vote) > 1:
-            if vote[1] > max_vote:
-                max_vote = vote[1]
-                state = vote[0]
+        if vote[1] > max_vote:
+            max_vote = vote[1]
+            state = vote[0]
 
     return state
 

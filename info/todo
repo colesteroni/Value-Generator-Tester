@@ -2,9 +2,8 @@
 
 * Part 1 *
 
-* Improve seed handler
+* Update readme to reflect command line options
 * Basic unit tests -> make sure filler distance function is accurate, oscillation function
-* Global dictionary that is set w/in generator for values that can be affected w/ seed
 * Dev tools for analyzing filler blocks and update other dev tools
 * Document functions? or make more readable
 
