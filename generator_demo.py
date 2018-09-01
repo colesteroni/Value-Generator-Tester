@@ -3,23 +3,47 @@
 # the blocks around these pivotal blocks will be chosen by a voting system of the pivotal blocks that
 # have wants based on the seed and influence based on their distance from the block being selected
 
-from vars_constant import state_dict
+from vars_constant import state_dict, screen_width, screen_height
 import vars_global
+
+import map  # Cell size
 
 from math import sin, sqrt
 
 from seed import generate_seed
 
 
-def seed_interpreter(seed):
+def base_gen(cell_map, var_dict):
+    range_x = (
+        int(vars_global.spectator_x / 50) - 1,
+        int(vars_global.spectator_x / 50) + int(screen_width / map.Map.Cell.size) + 2
+    )
+    range_y = (
+        int(vars_global.spectator_y / 50) - int(screen_height / map.Map.Cell.size) - 2,
+        int(vars_global.spectator_y / 50) + 2
+    )
+
+    for x in range(-var_dict['x_pivotal_gap'], var_dict['x_pivotal_gap']):
+        for y in range(-var_dict['y_pivotal_gap'], var_dict['y_pivotal_gap']):
+            if (x, y) not in var_dict['pivotals_cached']:
+                var_dict['pivotals_cached'].add((x, y))
+                var_dict['pivotal_cache'].append(cell_map.Cell(cell_map, x, y))
+
+    return [
+        [cell_map.Cell(cell_map, x, y) for y in range(range_y[0], range_y[1])]
+        for x in range(range_x[0], range_x[1])
+    ]
+
+
+def seed_interpreter(seed, var_dict):
     def set_by_dict(key, digit, value):
         if type(value) is not int:
             value = int("0x" + value, 0) * (1 if digit == 1 else ((digit - 1) * 16))
 
         if key is 'x_mod':
-            vars_global.x_pivotal_gap += value
+            var_dict['x_pivotal_gap'] += value
         elif key is 'y_mod':
-            vars_global.y_pivotal_gap += value
+            var_dict['y_pivotal_gap'] += value
 
     seed_dict = {
         0: (lambda value: set_by_dict('y_mod', 1, value)),
@@ -37,13 +61,18 @@ def seed_interpreter(seed):
         seed_dict[n](seed[n])
 
     # Ensure hard requirements met
-    if vars_global.x_pivotal_gap < 10: vars_global.x_pivotal_gap = 10
+    if var_dict['x_pivotal_gap'] < 10: var_dict['x_pivotal_gap'] = 10
 
-    if vars_global.y_pivotal_gap < 10: vars_global.y_pivotal_gap = 10
+    if var_dict['y_pivotal_gap'] < 10: var_dict['y_pivotal_gap'] = 10
 
-    if vars_global.x_pivotal_gap > 40: vars_global.x_pivotal_gap = 40
+    if var_dict['x_pivotal_gap'] > 40: var_dict['x_pivotal_gap'] = 40
 
-    if vars_global.y_pivotal_gap > 40: vars_global.y_pivotal_gap = 40
+    if var_dict['y_pivotal_gap'] > 40: var_dict['y_pivotal_gap'] = 40
+
+    print(
+        "Generated pivotal lengths - x: " + str(var_dict['x_section_length']) + " y: " + str(
+            var_dict['y_section_length'])
+    )
 
 
 def pivotal_oscillator(x, y):
@@ -71,21 +100,21 @@ def pivotal_state(xx, yy):
     return pivotal_filter(pivotal_oscillator(xx, yy))
 
 
-def filler_state(x, y):
-    dx = x % vars_global.x_pivotal_gap
-    dy = y % vars_global.y_pivotal_gap
+def filler_state(x, y, var_dict):
+    dx = x % var_dict['x_pivotal_gap']
+    dy = y % var_dict['y_pivotal_gap']
 
     x1 = x - dx
-    x2 = x + (vars_global.x_pivotal_gap - dx) if dx else None
+    x2 = x + (var_dict['x_pivotal_gap'] - dx) if dx else None
     y1 = y - dy
-    y2 = y + (vars_global.y_pivotal_gap - dy) if dy else None
+    y2 = y + (var_dict['y_pivotal_gap'] - dy) if dy else None
 
-    surrounding_pivotals = [[(x1, y1)]]
-    surrounding_pivotals += [[(x2, y1)]] if dx else []
-    surrounding_pivotals += [[(x1, y2)]]if dy else []
-    surrounding_pivotals += [[(x2, y2)]] if dx and dy else []
+    var_dict['surrounding_pivotals'] = [[(x1, y1)]]
+    var_dict['surrounding_pivotals'] += [[(x2, y1)]] if dx else []
+    var_dict['surrounding_pivotals'] += [[(x1, y2)]]if dy else []
+    var_dict['surrounding_pivotals'] += [[(x2, y2)]] if dx and dy else []
 
-    for pivotal in surrounding_pivotals:
+    for pivotal in var_dict['surrounding_pivotals']:
         if x - pivotal[0][0] and y - pivotal[0][1]:
             pivotal.append(sqrt((x - pivotal[0][0])**2 + (y - pivotal[0][1])**2))
         elif x - pivotal[0][0]:
@@ -96,7 +125,7 @@ def filler_state(x, y):
     # vote with weights based on distance & block weights
     votes = [[key] for key in state_dict]
 
-    for pivotal in surrounding_pivotals:
+    for pivotal in var_dict['surrounding_pivotals']:
         index = None
 
         for i in range(0, len(votes)):
@@ -116,5 +145,18 @@ def filler_state(x, y):
             if vote[1] > max_vote:
                 max_vote = vote[1]
                 state = vote[0]
+
+    return state
+
+
+def get_state(x, y, var_dict):
+    if not x % var_dict['x_pivotal_gap'] and not y % var_dict['y_pivotal_gap']:  # is pivotal block
+        xx = x / var_dict['x_pivotal_gap']
+        yy = y / var_dict['y_pivotal_gap']
+
+        state = pivotal_state(xx, yy)
+
+    else:  # is filler block
+        state = filler_state(x, y, var_dict)
 
     return state
