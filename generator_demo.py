@@ -23,11 +23,11 @@ def base_gen(cell_map, var_dict):
         int(vars_global.spectator_y / 50) + 2
     )
 
-    #for x in range(-var_dict['x_pivotal_gap'], var_dict['x_pivotal_gap'], var_dict['x_pivotal_gap']):
-     #   for y in range(-var_dict['y_pivotal_gap'], var_dict['y_pivotal_gap'], var_dict['y_pivotal_gap']):
-      #      if (x, y) not in var_dict['pivotals_cached']:
-       #         var_dict['pivotals_cached'].append((x, y))
-        #        var_dict['pivotal_cache'].append(cell_map.Cell(cell_map, x, y))
+    for x in range(-var_dict['x_pivotal_gap'], var_dict['x_pivotal_gap'], var_dict['x_pivotal_gap']):
+        for y in range(-var_dict['y_pivotal_gap'], var_dict['y_pivotal_gap'], var_dict['y_pivotal_gap']):
+            if (x, y) not in var_dict['pivotals_cached']:
+                var_dict['pivotals_cached'].append((x, y))
+                var_dict['pivotal_cache'].append(cell_map.Cell(cell_map, x, y))
 
     return [
         [cell_map.Cell(cell_map, x, y) for y in range(range_y[0], range_y[1])]
@@ -119,8 +119,8 @@ def filler_state(x, y, var_dict):
     for pivotal in surrounding_pivotals:
         if pivotal[0] not in var_dict['pivotals_cached']:
             var_dict['pivotals_cached'].append(pivotal[0])
-            var_dict['pivotal_cache'].append(pivotal_state(pivotal[0][0] / map.Map.Cell.size, pivotal[0][1] / map.Map.Cell.size))
-            pivotal.append(pivotal_state(pivotal[0][0] / map.Map.Cell.size, pivotal[0][1] / map.Map.Cell.size))
+            var_dict['pivotal_cache'].append(pivotal_state(pivotal[0][0] / var_dict['x_pivotal_gap'], pivotal[0][1] / var_dict['y_pivotal_gap']))
+            pivotal.append(pivotal_state(pivotal[0][0] / var_dict['x_pivotal_gap'], pivotal[0][1] / var_dict['y_pivotal_gap']))
 
         else:
             pivotal.append(var_dict['pivotal_cache'][var_dict['pivotals_cached'].index(pivotal[0])])
@@ -139,7 +139,7 @@ def filler_state(x, y, var_dict):
     for pivotal in surrounding_pivotals:
         for i in range(0, len(votes)):
             if votes[i][0] is pivotal[1]:
-                votes[i][1] += 1 * pivotal[2]
+                votes[i][1] += 1 * pivotal[2]**3
                 break
 
     state = 0
