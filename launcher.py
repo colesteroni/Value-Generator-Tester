@@ -35,9 +35,7 @@ def launch():
                       help="Enter starting cell as two ints separated by spaces.")
 
     def print_generators(options=None, opt=None, value=None, parser=None):
-        for name, generator_object in generator_dict.items():
-            print("{}: {}".format(name, generator_object.description))
-
+        [print("{}: {}".format(name, generator_object.description)) for name, generator_object in generator_dict.items()]
         pygame.quit()
         sys.exit()
 
