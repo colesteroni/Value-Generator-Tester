@@ -4,12 +4,10 @@
 
 * Basic unit tests -> make sure filler distance function is accurate, oscillation function
 * Dev tools for analyzing filler blocks and update other dev tools
-* Make code very readable w/out need for comments
 
 * Part 2 * Will be done more slowly so I have time for other projects *
 
 * Better seed generation
-* More tools to analyze maps
 * Add secondary pivotal cache since x_length - 1 * y_length - 1 blocks will be using the same 4 pivotals each time
 * Improve usability
 * Make hard for error to occur by way program is designed
