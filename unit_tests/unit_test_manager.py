@@ -31,8 +31,8 @@ def run_test(options=None, opt=None, value=None, parser=None):
 def main():
     parser = OptionParser()
 
-    # parser.add_option("-a", "--all", action="callback", callback=run_all_tests,
-    #                  help="Run all available unit tests")
+    parser.add_option("-a", "--all", dest='all',
+                     help="Run all available unit tests")
 
     parser.add_option("-r", "--run", type=str, dest="run", default=None,
                       help="Choose which unit tests to run. Usage python unit_test_manager.py -r <test>")
