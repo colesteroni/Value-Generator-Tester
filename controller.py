@@ -81,10 +81,3 @@ class Controller(object):
                   )
 
         self.player.update(self.buttons_held)
-
-        if True in self.buttons_held.values() and self.last_log_time + 1000 <= int(round(time.time() * 1000)):
-            self.last_log_time = int(round(time.time() * 1000))
-            print("Spectator Pos: ({}, {})".format(vars_global.spectator_x, vars_global.spectator_y))
-            return True
-
-        return False

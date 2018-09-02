@@ -1,4 +1,4 @@
-# Map-Engine
+# Generative map engine tester
 Cell based map engine meant to test (pseudo)random terrain generation algorithms. I created this project mainly to practice git and teach myself about controlling randomness as a sort of prerequisite to machine learning. Hopefully though, someone can make use of this as a part of a game or to learn something new! I am also trying to learn to program in a way that is more readable so please pardon my lack of comments. Uses Python 3.6 and PyGame 1.9. 
 
 # How to use

@@ -9,23 +9,25 @@ import vars_global
 
 
 class Map(object):
-    def __init__(self, display=None, gen_slot=None, seed=None):
+    def __init__(self, display=None, generator_chosen=None, seed=None):
         self.display = display
 
-        self.gen_slot = gen_slot
+        # Key for dictionary value in generators.generator_dict that is chosen
+        self.generator_chosen = generator_chosen
 
         print("Creating generator object.")
         self.generator = self.Generator(self, seed)
 
     def update(self):
+        # Generator updates cells in cell_list
         self.generator.generate()
 
     def render(self, cell_list=None):
         cell_list = cell_list if cell_list else self.generator.cell_list
 
         for column in cell_list:
-            for row in column:
-                row.render()
+            for cell in column:
+                cell.render()
 
     class Cell(object):
         size = 50
@@ -35,7 +37,7 @@ class Map(object):
 
             self.display = self.cell_map.display
 
-            self.gen_slot = cell_map.gen_slot
+            self.generator_chosen = cell_map.generator_chosen
 
             self.x = x
             self.y = y
@@ -69,15 +71,15 @@ class Map(object):
         def __init__(self, cell_map, seed="0A0A"):
             self.cell_map = cell_map
 
-            self.gen_slot = cell_map.gen_slot
+            self.generator_chosen = cell_map.generator_chosen
 
             self.cell_list = []
 
             print("Done creating generator object.")
             print("Interpreting seed.")
 
-            generators.generator_dict[self.gen_slot].seed_interpreter(
-                seed, generators.generator_dict[self.gen_slot].var_dict)
+            generators.generator_dict[self.generator_chosen].seed_interpreter(
+                seed, generators.generator_dict[self.generator_chosen].var_dict)
 
             print("Done interpreting seed.")
 
@@ -88,10 +90,10 @@ class Map(object):
             if y is None:
                 y = cell.y
 
-            return generators.generator_dict[self.gen_slot].get_state(
-                x, y, generators.generator_dict[self.gen_slot].var_dict
+            return generators.generator_dict[self.generator_chosen].get_state(
+                x, y, generators.generator_dict[self.generator_chosen].var_dict
             )
 
         def generate(self):
-            self.cell_list = generators.generator_dict[self.gen_slot].base_gen(
-                self.cell_map, generators.generator_dict[self.gen_slot].var_dict)
+            self.cell_list = generators.generator_dict[self.generator_chosen].base_gen(
+                self.cell_map, generators.generator_dict[self.generator_chosen].var_dict)

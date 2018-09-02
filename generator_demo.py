@@ -1,7 +1,11 @@
 # Map generator
-# Every section_l blocks there will be a block chosen by a certain number in the seed fed into a formula
-# the blocks around these pivotal blocks will be chosen by a voting system of the pivotal blocks that
-# have wants based on the seed and influence based on their distance from the block being selected
+# Every x/y_pivotal_gap there is a pivotal block that gets chosen by the function pivotal_state. These blocks go
+# through an oscillation function and then a filter to determine their type. The distance between these blocks is set
+# by the seed interpreter. The blocks in-between these pivotal blocks are filler blocks chosen by the function
+# filler_state. This function finds the surrounding 2(if in the middle of only 2) / 4 pivotal blocks and finds the
+# distance to each one. The pivotal blocks then 'vote' with proportion to their distance^3 (may change). The filler 44
+# block has a state chosen by whatever vote won.
+# For efficiency the pivotal blocks are cached & referenced by whatever pivotal block is interested.
 
 from vars_constant import state_dict, screen_width, screen_height
 import vars_global
@@ -77,28 +81,26 @@ def seed_interpreter(seed, var_dict):
         var_dict['y_pivotal_gap'] = var_dict['max_y_pivotal_gap']
 
 
-def pivotal_oscillator(x, y):
-    oscillator = abs(
-        100 * sin(x + y) / (
-            x + y if not x + (
-                        y) == 0 else 44)
-    )
-
-    return oscillator
-
-
-def pivotal_filter(value):
-    if value < 2:
-        return 0
-    elif value < 5:
-        return 1
-    elif value < 8:
-        return 2
-    else:
-        return 3
-
-
 def pivotal_state(xx, yy):
+    def pivotal_oscillator(x, y):
+        oscillator = abs(
+            100 * sin(x + y) / (
+                x + y if not x + (
+                    y) == 0 else 44)
+        )
+
+        return oscillator
+
+    def pivotal_filter(value):
+        if value < 1:
+            return 0
+        elif value < 3:
+            return 1
+        elif value < 5:
+            return 2
+        else:
+            return 3
+
     return pivotal_filter(pivotal_oscillator(xx, yy))
 
 

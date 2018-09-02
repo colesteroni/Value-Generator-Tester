@@ -2,24 +2,19 @@
 
 * Part 1 *
 
-* Update readme to reflect command line options
 * Basic unit tests -> make sure filler distance function is accurate, oscillation function
 * Dev tools for analyzing filler blocks and update other dev tools
-* Document functions? or make more readable
+* Make code very readable w/out need for comments
 
 * Part 2 * Will be done more slowly so I have time for other projects *
 
-* Parser to chose the generator object to test in command line
-* Much more tools to analyze maps
+* Better seed generation
+* More tools to analyze maps
 * Add secondary pivotal cache since x_length - 1 * y_length - 1 blocks will be using the same 4 pivotals each time
-* Make more modular (do a lot of refactoring)
-* Make code very readable w/out need for comments !!!
 * Improve usability
 * Make hard for error to occur by way program is designed
 * Make better use of the language
 * Implement more efficient data structures
-* Change when pivotals are pre-generated
-* Empty pivotal cache periodically
 
 * Part 3 * To be done when better ideas come about *
 

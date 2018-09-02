@@ -23,6 +23,7 @@ from main import main
 
 
 def launch():
+    # Possible flags to throw when running module from command line. python launcher.py <flags>
     parser = OptionParser()
 
     parser.add_option("-r", "--run", type=str, dest="generator",
@@ -45,6 +46,7 @@ def launch():
 
     (options, args) = parser.parse_args(sys.argv)
 
+    # Seeing if value set in flag, if not set to hardcoded default
     try:
         generator = options.generator
 
@@ -78,6 +80,7 @@ def launch():
         pass
 
     print("Received values, Generator Choice: \"{}\", Seed: \"{}\"".format(generator, seed))
+    print("Initializing engine.")
 
     startup_dict = read_startup_file()
 

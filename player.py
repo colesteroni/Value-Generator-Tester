@@ -42,6 +42,10 @@ class Player(object):
         if buttons_held['Down']:
             vars_global.spectator_y -= speed
 
+        if True in buttons_held.values() and self.last_log_time + 1000 <= int(round(time.time() * 1000)):
+            self.last_log_time = int(round(time.time() * 1000))
+            print("Spectator Pos: ({}, {})".format(vars_global.spectator_x, vars_global.spectator_y))
+
         self.surface.fill(colors.light_green)
 
         self.rect = self.surface.get_rect(center=(self.x, self.y))
