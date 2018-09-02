@@ -38,35 +38,38 @@ player then renders everything onto the screen. It also handles the clock ticks 
 
 
 ## Per-Object Explanations #
-##Controller
+### Controller
+
 The controller pretty much just factors the pygame.event.get loop out of the main loop.
 
-##Player
+### Player
+
 The player object handles movement and appears in the center of the screen as a green square.
 
-##Map
+### Map
+
 The map is a collection of cells generated procedurally by the generator. Each map creates it's own generator and seed
     if not given. The map is navigated by the player.
     
-##Map Seed
+### Map Seed
 The map seed is a series of hex numbers that set certain variables in the generator. A map seed is crucial to the 
     generator because it would be very hard to debug and update an entirely random map generator. The seed allows the 
     developer to make use of a static intermediary between the code and its produced output.
 
-##Map Generator
+### Map Generator
 The map generator calls the functions assigned to the chosen generator in the GeneratorTemplate(generators.py). On 
     generator creation seed_interpreter is called. On each map.update base_gen is called which creates a cell list, each
     cell calls the get_state function with its x, y coordinates. Every generator function gets called with a variable 
     var_dict that can be customized for each generator with any amount of values.
 
-##Unit Tests
+### Unit Tests
 The unit tests are to make sure that everything is working as it should be. The unit test manager will run everything
     that is has imported. The manager also has a built in parser so that you can call various extra functions.
 * '-l' / '--list' lists available unit tests
 * '-a' / '--all' is run by default.
 * '-r \<test>' / '--run \<test>' runs the specific unit test
 
-##Dev Tools
+### Dev Tools
 This project was made to help control and improve the randomness of psuedo-random value generation engines so it would 
     be helpful to have some built in tools to measure the quality a the generators value creation. These are all pretty 
     self explanatory and very susceptible to change so figuring them out in code is the most effective path.
