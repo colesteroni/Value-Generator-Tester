@@ -68,17 +68,17 @@ def seed_interpreter(seed, var_dict):
         seed_dict[n](seed[n])
 
     # Ensure hard requirements met
+    if var_dict['x_pivotal_gap'] > var_dict['max_x_pivotal_gap']:
+        var_dict['x_pivotal_gap'] = var_dict['x_pivotal_gap'] % var_dict['max_x_pivotal_gap']
+
+    if var_dict['y_pivotal_gap'] > var_dict['max_y_pivotal_gap']:
+        var_dict['y_pivotal_gap'] = var_dict['y_pivotal_gap'] % var_dict['max_y_pivotal_gap']
+
     if var_dict['x_pivotal_gap'] < var_dict['min_x_pivotal_gap']:
         var_dict['x_pivotal_gap'] = var_dict['min_x_pivotal_gap']
 
     if var_dict['y_pivotal_gap'] < var_dict['min_y_pivotal_gap']:
         var_dict['y_pivotal_gap'] = var_dict['min_y_pivotal_gap']
-
-    if var_dict['x_pivotal_gap'] > var_dict['max_x_pivotal_gap']:
-        var_dict['x_pivotal_gap'] = var_dict['max_x_pivotal_gap']
-
-    if var_dict['y_pivotal_gap'] > var_dict['max_y_pivotal_gap']:
-        var_dict['y_pivotal_gap'] = var_dict['max_y_pivotal_gap']
 
 
 def pivotal_state(xx, yy):
