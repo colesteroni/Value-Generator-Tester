@@ -67,6 +67,7 @@ The unit tests are to make sure that everything is working as it should be. The 
 * '-r \<test>' / '--run \<test>' runs the specific unit test
 
 ### Tools
+#### PLEASE NOTE: Can only run tools on command line from inside tools directory!
 This project was made to help control and improve the randomness of psuedo-random value generation engines so it would 
     be helpful to have some built in tools to measure the quality a the generators value creation. These are all pretty 
     self explanatory and very susceptible to change so figuring them out in code is the most effective path.
