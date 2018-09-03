@@ -1,8 +1,5 @@
 # This module is meant to show the quality of pivotal block generation
 
-from vars_constant import default_x_pivotal_gap, default_y_pivotal_gap
-import vars_global
-
 from generator_demo import pivotal_state
 
 

@@ -6,8 +6,8 @@ import sys
 sys.path.append("..")
 import vars_constant
 
-
 import generators
+
 
 def prob_pivotal_block(range_x, range_y, generator):
 
@@ -39,11 +39,11 @@ def prob_pivotal_block(range_x, range_y, generator):
 if __name__ == '__main__':
     parser = ArgumentParser(description='Usage python block_probability.py <generator> <x> <y>')
 
-    parser.add_argument('generator', type=str, default='Demo')
+    parser.add_argument('generator', default='Demo')
 
-    parser.add_argument('range_x', type=int, default=50)
+    parser.add_argument('range_x', default=50)
 
-    parser.add_argument('range_y', type=int, default=50)
+    parser.add_argument('range_y', default=50)
 
     args = parser.parse_args()
 
