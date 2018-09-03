@@ -1,21 +1,24 @@
 # This is meant to solve the probability of a block spawning based on seed & formulas in use
 
-from vars_constant import state_dict
-import vars_global
+from argparse import ArgumentParser
+import sys
 
-from generator_demo import pivotal_state
+sys.path.append("..")
+import vars_constant
 
 
-def prob_pivotal_block():
+import generators
+
+def prob_pivotal_block(range_x, range_y, generator):
 
     counter = []
 
-    for key in state_dict:
+    for key in vars_constant.state_dict:
         counter.append([key, 0, 0])
 
-    for xx in range(0, vars_global.x_section_length):
-        for yy in range(0, vars_global.y_section_length):
-            output = pivotal_state(xx, yy)
+    for xx in range(0, range_x):
+        for yy in range(0, range_y):
+            output = generators.generator_dict[generator].get_state(xx, yy, generators.generator_dict[generator].var_dict)
 
             for i in range(0, len(counter)):
                 if int(output) == counter[i][0]:
@@ -30,8 +33,18 @@ def prob_pivotal_block():
     for item in counter:
         item[2] = (str(item[1] / total * 100) if total > 0 else "0") + '%'
 
-    print(counter)
+    return counter
 
 
 if __name__ == '__main__':
-    prob_pivotal_block()
+    parser = ArgumentParser(description='Usage python block_probability.py <generator> <x> <y>')
+
+    parser.add_argument('generator', type=str, default='Demo')
+
+    parser.add_argument('range_x', type=int, default=50)
+
+    parser.add_argument('range_y', type=int, default=50)
+
+    args = parser.parse_args()
+
+    print(prob_pivotal_block(args.range_x, args.range_y, args.generator))

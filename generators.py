@@ -39,7 +39,7 @@ import generator_demo as gen_dem
 generator_dict = {
     "Demo": GeneratorTemplate(
         gen_dem.base_gen,
-        {'pivotals_cached': [], 'pivotal_cache': [], 'x_pivotal_gap': 0, 'y_pivotal_gap': 0, 'min_x_pivotal_gap': 10,
+        {'pivotals_cached': [], 'pivotal_cache': [], 'x_pivotal_gap': 10, 'y_pivotal_gap': 10, 'min_x_pivotal_gap': 10,
          'min_y_pivotal_gap': 10, 'max_x_pivotal_gap': 20, 'max_y_pivotal_gap': 20, 'x_section_length': 50,
          'y_section_length': 50},
         gen_dem.seed_interpreter, gen_dem.get_state,
