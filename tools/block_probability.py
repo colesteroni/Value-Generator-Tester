@@ -1,9 +1,11 @@
 # This is meant to solve the probability of a block spawning based on seed & formulas in use
+# PLEASE NOTE: Can only run tools on command line from inside tools directory
 
 from argparse import ArgumentParser
-import sys
 
+import sys
 sys.path.append("..")
+
 import vars_constant
 
 import generators
@@ -16,9 +18,9 @@ def prob_pivotal_block(range_x, range_y, generator):
     for key in vars_constant.state_dict:
         counter.append([key, 0, 0])
 
-    for xx in range(0, range_x):
-        for yy in range(0, range_y):
-            output = generators.generator_dict[generator].get_state(xx, yy, generators.generator_dict[generator].var_dict)
+    for x in range(0, range_x):
+        for y in range(0, range_y):
+            output = generators.generator_dict[generator].get_state(x, y, generators.generator_dict[generator].var_dict)
 
             for i in range(0, len(counter)):
                 if int(output) == counter[i][0]:
@@ -37,13 +39,13 @@ def prob_pivotal_block(range_x, range_y, generator):
 
 
 if __name__ == '__main__':
-    parser = ArgumentParser(description='Usage python block_probability.py <generator> <x> <y>')
+    parser = ArgumentParser(description='Usage: python block_probability.py <generator> <x> <y>')
 
-    parser.add_argument('generator', default='Demo')
+    parser.add_argument('generator', type=str, nargs='?', default='Demo')
 
-    parser.add_argument('range_x', default=50)
+    parser.add_argument('range_x', type=int, nargs='?', default=50)
 
-    parser.add_argument('range_y', default=50)
+    parser.add_argument('range_y', type=int, nargs='?', default=50)
 
     args = parser.parse_args()
 
