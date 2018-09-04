@@ -11,7 +11,10 @@ import vars_constant
 import generators
 
 
-def prob_pivotal_block(range_x, range_y, generator):
+def prob_pivotal_block(range_x, range_y, generator, seed=None):
+
+    if seed:
+        generators.generator_dict[generator].seed_interpreter(seed, generators.generator_dict[generator].var_dict)
 
     counter = []
 
@@ -47,6 +50,8 @@ if __name__ == '__main__':
 
     parser.add_argument('range_y', type=int, nargs='?', default=50)
 
+    parser.add_argument('-s', '--seed', type=str, dest='seed')
+
     args = parser.parse_args()
 
-    print(prob_pivotal_block(args.range_x, args.range_y, args.generator))
+    print(prob_pivotal_block(args.range_x, args.range_y, args.generator, args.seed if args.seed else None))
